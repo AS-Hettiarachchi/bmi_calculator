@@ -1,7 +1,5 @@
-// ignore_for_file: avoid_print, prefer_const_constructors
-
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,17 +8,23 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       home: HomePage(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class HomePage extends StatefulWidget {
+  HomePage({Key? key}) : super(key: key);
 
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final weightController = TextEditingController();
-  final ageController = TextEditingController();
+  final heightController = TextEditingController();
+  double? bmi;
 
   @override
   Widget build(BuildContext context) {
@@ -29,90 +33,187 @@ class HomePage extends StatelessWidget {
         title: const Text("BMI Calculator"),
         backgroundColor: Colors.cyan,
       ),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Image.network(
-                    "https://www.towngatepractice.net/wp-content/uploads/sites/508/2022/05/BMI-CALCULATOR.png"),
-              ),
-            ],
-          ),
-          const Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      left: 50.0, right: 50.0, top: 100.0, bottom: 10.0),
-                  child: Text("Weight"),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Image.network(
+                      "https://www.towngatepractice.net/wp-content/uploads/sites/508/2022/05/BMI-CALCULATOR.png"),
                 ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      left: 50.0, right: 50.0, top: 100.0, bottom: 10.0),
-                  child: Text("Age"),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: 50.0, right: 50.0, top: 100.0, bottom: 10.0),
+                    child: Text("Weight"),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      left: 50.0, right: 50.0, top: 10.0, bottom: 50.0),
-                  child: TextField(
-                    controller: weightController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: 'Enter your weight in KG',
-                      border: OutlineInputBorder(),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: 50.0, right: 50.0, top: 100.0, bottom: 10.0),
+                    child: Text("Height"),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: 50.0, right: 50.0, top: 10.0, bottom: 50.0),
+                    child: TextField(
+                      controller: weightController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: 'Enter your weight in KG',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      left: 50.0, right: 50.0, top: 10.0, bottom: 50.0),
-                  child: TextField(
-                    controller: ageController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: 'Enter your age in years',
-                      border: OutlineInputBorder(),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: 50.0, right: 50.0, top: 10.0, bottom: 50.0),
+                    child: TextField(
+                      controller: heightController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: 'Enter your height in Meters',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 200.0, right: 200.0),
-                  child: ElevatedButton(
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 200.0, right: 200.0),
+                    child: ElevatedButton(
                       onPressed: () {
                         calculateBMI(
                           double.parse(weightController.text),
-                          double.parse(ageController.text),
+                          double.parse(heightController.text),
                         );
                       },
-                      child: Text("Calculate")),
+                      child: Text(
+                        "Calculate",
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          )
-        ],
+              ],
+            ),
+            if (bmi != null) // Show BMI only if it's calculated
+              Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 20.0),
+                    child: Text(
+                      "Your BMI is: ${bmiToString()}",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        gotoInfo();
+                      },
+                      child: Text(
+                        "More info",
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+          ],
+        ),
       ),
     );
   }
 
-  void calculateBMI(double weight, double age) {
+  String bmiToString() {
+    return bmi!.toStringAsFixed(1);
+  }
+
+  void gotoInfo() {
+    Get.to(ResultPage(bmi: bmi!));
+  }
+
+  void calculateBMI(double weight, double height) {
     print("Weight: $weight KG");
-    print("Age: $age years");
+    print("Height: $height Meters");
+
+    double calculatedBMI = weight / (height * height);
+    print(calculatedBMI);
+
+    setState(() {
+      bmi = calculatedBMI;
+    });
+  }
+}
+
+class ResultPage extends StatelessWidget {
+  final double bmi;
+
+  ResultPage({required this.bmi});
+
+  String getBmiCategory(double bmi) {
+    if (bmi < 16) {
+      return "Severe undernourishment";
+    } else if (bmi >= 16 && bmi < 17) {
+      return "Medium undernourishment";
+    } else if (bmi >= 17 && bmi < 18.5) {
+      return "Slight undernourishment";
+    } else if (bmi >= 18.5 && bmi < 25) {
+      return "Normal nutrition state";
+    } else if (bmi >= 25 && bmi < 30) {
+      return "Overweight";
+    } else if (bmi >= 30 && bmi < 40) {
+      return "Obesity";
+    } else {
+      return "Extreme obesity";
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String category = getBmiCategory(bmi);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("BMI Result"),
+        backgroundColor: Colors.cyan,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Your BMI is: ${bmi.toStringAsFixed(1)}",
+              style: TextStyle(fontSize: 24),
+            ),
+            SizedBox(height: 20),
+            Text(
+              "BMI Category: $category",
+              style: TextStyle(fontSize: 24),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
