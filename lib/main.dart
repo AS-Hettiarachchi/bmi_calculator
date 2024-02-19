@@ -1,16 +1,13 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api, use_super_parameters, prefer_const_literals_to_create_immutables
-
-import 'dart:math';
-
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-// ignore: depend_on_referenced_packages
-import 'package:get/get.dart';
+import 'dart:math'; // for the BMI formula calculations
+import 'package:flutter/material.dart'; // material ui
+import 'package:flutter/services.dart'; // input data validation (only numeric values)
+import 'package:get/get.dart'; // GetX
 
 void main() {
   runApp(MyApp());
 }
 
+/// Main application widget.
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -20,6 +17,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// Home page widget.
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
@@ -27,16 +25,17 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+/// State for the home page widget.
 class _HomePageState extends State<HomePage> {
-  final weightController = TextEditingController();
-  final heightController = TextEditingController();
-  double? bmi;
+  final weightController = TextEditingController(); // weight input controller
+  final heightController = TextEditingController(); // height input controller
+  double? bmi; // nullable variable to store BMI value
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("BMI Calculator"),
+        title: const Text("BMI Calculator"), // home screen title bar
         backgroundColor: Colors.cyan,
       ),
       body: SingleChildScrollView(
@@ -154,14 +153,17 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// Converts BMI value to a string with one decimal place.
   String bmiToString() {
     return bmi!.toStringAsFixed(1);
   }
 
+  /// Navigates to the information screen.
   void gotoInfo() {
     Get.to(ResultPage(bmi: bmi!));
   }
 
+  /// Calculates BMI based on weight and height.
   void calculateBMI(double weight, double height) {
     print("Weight: $weight KG");
     print("Height: $height CM");
@@ -175,11 +177,13 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+/// Result page widget.
 class ResultPage extends StatelessWidget {
   final double bmi;
 
   ResultPage({required this.bmi});
 
+  /// Determines BMI category based on BMI value.
   String getBmiCategory(double bmi) {
     if (bmi < 16) {
       return "Severe undernourishment";
