@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.only(
-                        left: 50.0, right: 50.0, top: 10.0, bottom: 50.0),
+                        left: 20.0, right: 10.0, top: 10.0, bottom: 50.0),
                     child: TextField(
                       controller: weightController,
                       keyboardType: TextInputType.number,
@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.only(
-                        left: 50.0, right: 50.0, top: 10.0, bottom: 50.0),
+                        left: 10.0, right: 20.0, top: 10.0, bottom: 50.0),
                     child: TextField(
                       controller: heightController,
                       keyboardType: TextInputType.number,
@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(left: 200.0, right: 200.0),
+                    padding: EdgeInsets.only(left: 120.0, right: 120.0),
                     child: ElevatedButton(
                       onPressed: () {
                         calculateBMI(
