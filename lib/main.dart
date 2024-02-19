@@ -1,6 +1,6 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, prefer_const_constructors
 
-import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,22 +17,26 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
+  HomePage({super.key});
+
+  final weightController = TextEditingController();
+  final ageController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("BMI Calculator"),
-        backgroundColor: Colors.lime[400],
+        backgroundColor: Colors.cyan,
       ),
       body: Column(
         children: [
-          const Row(
+          Row(
             children: [
-              Padding(
-                padding: EdgeInsets.only(
-                    left: 200.0, right: 200.0, top: 50.0, bottom: 20.0),
-                child: Text("image pos"),
-              )
+              Expanded(
+                child: Image.network(
+                    "https://www.towngatepractice.net/wp-content/uploads/sites/508/2022/05/BMI-CALCULATOR.png"),
+              ),
             ],
           ),
           const Row(
@@ -53,13 +57,14 @@ class HomePage extends StatelessWidget {
               ),
             ],
           ),
-          const Row(
+          Row(
             children: [
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(
                       left: 50.0, right: 50.0, top: 10.0, bottom: 50.0),
                   child: TextField(
+                    controller: weightController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       labelText: 'Enter your weight in KG',
@@ -73,6 +78,7 @@ class HomePage extends StatelessWidget {
                   padding: EdgeInsets.only(
                       left: 50.0, right: 50.0, top: 10.0, bottom: 50.0),
                   child: TextField(
+                    controller: ageController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       labelText: 'Enter your age in years',
@@ -88,8 +94,14 @@ class HomePage extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(left: 200.0, right: 200.0),
-                  child:
-                      ElevatedButton(onPressed: test, child: Text("Calculate")),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        calculateBMI(
+                          double.parse(weightController.text),
+                          double.parse(ageController.text),
+                        );
+                      },
+                      child: Text("Calculate")),
                 ),
               ),
             ],
@@ -99,7 +111,8 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  test() {
-    print("aa");
+  void calculateBMI(double weight, double age) {
+    print("Weight: $weight KG");
+    print("Age: $age years");
   }
 }
