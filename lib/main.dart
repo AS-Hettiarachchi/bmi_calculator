@@ -1,4 +1,7 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api, use_super_parameters, prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:get/get.dart';
 
 void main() {
