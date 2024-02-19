@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api, use_super_parameters, prefer_const_literals_to_create_immutables
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // ignore: depend_on_referenced_packages
 import 'package:get/get.dart';
 
@@ -74,6 +77,7 @@ class _HomePageState extends State<HomePage> {
                     child: TextField(
                       controller: weightController,
                       keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: InputDecoration(
                         labelText: 'Enter your weight in KG',
                         border: OutlineInputBorder(),
@@ -88,8 +92,9 @@ class _HomePageState extends State<HomePage> {
                     child: TextField(
                       controller: heightController,
                       keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: InputDecoration(
-                        labelText: 'Enter your height in Meters',
+                        labelText: 'Enter your height in CM',
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -159,9 +164,9 @@ class _HomePageState extends State<HomePage> {
 
   void calculateBMI(double weight, double height) {
     print("Weight: $weight KG");
-    print("Height: $height Meters");
+    print("Height: $height CM");
 
-    double calculatedBMI = weight / (height * height);
+    double calculatedBMI = weight / pow((height / 100), 2);
     print(calculatedBMI);
 
     setState(() {
